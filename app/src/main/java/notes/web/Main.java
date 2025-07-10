@@ -1,17 +1,17 @@
 package notes.web;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+
+import com.sun.net.httpserver.HttpServer;
 
 public class Main {
-    public static void main(String[] args) {
-        try(Connection conn=DBConnection.getConnection()) {
-            Statement stmt=conn.createStatement();
-            try(ResultSet rs=stmt.executeQuery("SELECT * FROM users")) {
-                System.out.println(rs.next());
-            }
-        } catch(SQLException e) {}
+    public static void main(String[] args) throws IOException {
+        int port=8080;
+        HttpServer server=HttpServer.create(new InetSocketAddress(port), 0);
+        server.createContext("/", new RequestHandler());
+        server.setExecutor(null);
+        System.out.println("Server started at http://localhost:"+port);
+        server.start();
     }
 }
