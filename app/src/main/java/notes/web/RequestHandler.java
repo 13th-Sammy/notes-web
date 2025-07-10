@@ -71,9 +71,6 @@ public class RequestHandler implements HttpHandler {
         if (path.equals("/") || path.isEmpty()) path = "/index.html";
         Path filePath = Paths.get("public" + path);
 
-        // Debug
-        System.out.println("Serving: "+filePath.toAbsolutePath());
-
         if (Files.exists(filePath) && !Files.isDirectory(filePath)) {
             byte[] bytes = Files.readAllBytes(filePath);
             String contentType = guessContentType(path);

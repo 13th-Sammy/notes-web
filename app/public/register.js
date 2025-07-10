@@ -30,4 +30,5 @@ async function register(event) {
     }
 }
 
-["click, touchstart"].forEach(eventType => okBtn.addEventListener(eventType, register));
+okBtn.addEventListener("click", register);
+okBtn.addEventListener("touchstart", register);
