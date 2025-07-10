@@ -1,0 +1,35 @@
+body {
+    background-color: #1e1e1e;
+    color: white;
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 18px;
+}
+
+.btn {
+    background: lightblue;
+    color: black;
+    height: 40px;
+    width: auto;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+    padding: 5px 10px;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background: blue;
+    color: white;
+    text-decoration: none;
+}
+
+input {
+    background: #ccc;
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 40px;
+    width: 25%;
+    padding: 5px 10px;
+}
