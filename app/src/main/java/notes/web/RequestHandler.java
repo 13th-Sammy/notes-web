@@ -28,14 +28,15 @@ public class RequestHandler implements HttpHandler {
         }
     }
 
+    @SuppressWarnings("UseSpecificCatch")
     private void handleRegister(HttpExchange exchange) throws IOException {
         try {
             JSONObject req = readJsonFromRequest(exchange);
             String username = req.getString("username");
             String password = req.getString("password");
 
-            // TODO: You will implement this
-            boolean success = false; // Replace with: UserDAO.registerUser(username, password);
+            UserDAO dao=new UserDAO();
+            boolean success = dao.registerUser(username, password);
 
             JSONObject res = new JSONObject();
             res.put("success", success);
@@ -50,6 +51,7 @@ public class RequestHandler implements HttpHandler {
         }
     }
 
+    @SuppressWarnings("resource")
     private JSONObject readJsonFromRequest(HttpExchange exchange) throws IOException {
         String body = new BufferedReader(new InputStreamReader(exchange.getRequestBody()))
                 .lines().collect(Collectors.joining("\n"));
@@ -60,9 +62,9 @@ public class RequestHandler implements HttpHandler {
         byte[] bytes = res.toString().getBytes(StandardCharsets.UTF_8);
         exchange.getResponseHeaders().add("Content-Type", "application/json");
         exchange.sendResponseHeaders(200, bytes.length);
-        OutputStream os = exchange.getResponseBody();
-        os.write(bytes);
-        os.close();
+        try (OutputStream os = exchange.getResponseBody()) {
+            os.write(bytes);
+        }
     }
 
     private void serveStaticFile(HttpExchange exchange, String path) throws IOException {
@@ -74,15 +76,15 @@ public class RequestHandler implements HttpHandler {
             String contentType = guessContentType(path);
             exchange.getResponseHeaders().add("Content-Type", contentType);
             exchange.sendResponseHeaders(200, bytes.length);
-            OutputStream os = exchange.getResponseBody();
-            os.write(bytes);
-            os.close();
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(bytes);
+            }
         } else {
             String notFound = "404 Not Found";
             exchange.sendResponseHeaders(404, notFound.length());
-            OutputStream os = exchange.getResponseBody();
-            os.write(notFound.getBytes());
-            os.close();
+            try(OutputStream os = exchange.getResponseBody()) {
+                os.write(notFound.getBytes());
+            }
         }
     }
 
