@@ -38,7 +38,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'notes.web.App'
+    mainClass = 'notes.web.Main'
 }
 
 tasks.named('test') {
