@@ -68,8 +68,11 @@ public class RequestHandler implements HttpHandler {
     }
 
     private void serveStaticFile(HttpExchange exchange, String path) throws IOException {
-        if (path.equals("/")) path = "/index.html";
+        if (path.equals("/") || path.isEmpty()) path = "/index.html";
         Path filePath = Paths.get("public" + path);
+
+        // Debug
+        System.out.println("Serving: "+filePath.toAbsolutePath());
 
         if (Files.exists(filePath) && !Files.isDirectory(filePath)) {
             byte[] bytes = Files.readAllBytes(filePath);
