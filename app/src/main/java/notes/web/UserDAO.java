@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDAO {
-    public boolean registerUser(String username, String password) {
+    public boolean registerUser(String username, String password) throws SQLException {
         try(Connection conn=DBConnection.getConnection()) {
             String checkExists="SELECT * FROM users WHERE username=?";
             try(PreparedStatement ps=conn.prepareStatement(checkExists)) {
@@ -26,8 +26,7 @@ public class UserDAO {
                 return true;
             }
         } catch(SQLException e) {
-            System.err.println("SQL Error in registerUser: "+e.getMessage());
-            return false;
+            throw e;
         }
     }
 }
