@@ -11,7 +11,7 @@ public class Main {
         HttpServer server=HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/", new RequestHandler());
         server.setExecutor(null);
-        System.out.println("Server started at http://localhost:"+port);
         server.start();
+        System.out.println("Server started at http://localhost:"+port);
     }
 }
