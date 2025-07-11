@@ -184,7 +184,7 @@ delNoteBtn.addEventListener("click", function() {
     const cards=document.querySelectorAll(".note-card");
     cards.forEach(card => {
         let del=card.querySelector(".delete-cross");
-        if(!del) {
+        if(deleteMode && !del) {
             const cross=document.createElement("span");
             cross.className="delete-cross";
             cross.textContent="❌";
@@ -228,7 +228,7 @@ delNoteBtn.addEventListener("click", function() {
             card.appendChild(cross);
         }
         else {
-            if (del) del.remove();
+            if (!deleteMode && del) del.remove();
         }
     });
 });
@@ -238,7 +238,7 @@ delNoteBtn.addEventListener("touchstart", function() {
     const cards=document.querySelectorAll(".note-card");
     cards.forEach(card => {
         let del=card.querySelector(".delete-cross");
-        if(!del) {
+        if(deleteMode && !del) {
             const cross=document.createElement("span");
             cross.className="delete-cross";
             cross.textContent="❌";
@@ -282,7 +282,7 @@ delNoteBtn.addEventListener("touchstart", function() {
             card.appendChild(cross);
         }
         else {
-            if (del) del.remove();
+            if (!deleteMode && del) del.remove();
         }
     });
 });
