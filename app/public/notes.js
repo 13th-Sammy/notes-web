@@ -47,7 +47,7 @@ async function getNotes() {
             });
         }
         else {
-            alert("Failed to load notes");
+            alert(response.message || "Failed to load notes");
         }
     } catch (e) {
         alert("Error: "+e?.message||e);

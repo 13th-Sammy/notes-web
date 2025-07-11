@@ -117,12 +117,10 @@ public class RequestHandler implements HttpHandler {
             NotesDAO dao=new NotesDAO();
             JSONArray notesArray=dao.getNotes(username);
             
-            String responseText=notesArray.toString();
-            exchange.getResponseHeaders().set("Content-Type", "application/json");
-            exchange.sendResponseHeaders(200, responseText.getBytes().length);
-            try(OutputStream os=exchange.getResponseBody()) {
-                os.write(responseText.getBytes());
-            }
+            JSONObject res=new JSONObject();
+            res.put("notes", notesArray);
+            
+            sendJsonResponse(exchange, res);
         } catch (Exception e) {
             JSONObject res = new JSONObject();
             res.put("success", false);
