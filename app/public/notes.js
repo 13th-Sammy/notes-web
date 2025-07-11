@@ -94,13 +94,13 @@ async function addNote(title, content) {
     }
 }
 
+function clearNotes() {
+    notesContainer.innerHTML="";
+}
+
 function logOut() {
     localStorage.removeItem("username");
     window.location.href="login.html";
-}
-
-function clearNotes() {
-    notesContainer.innerHTML="";
 }
 
 getNotes();
