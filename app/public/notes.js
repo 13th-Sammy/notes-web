@@ -11,6 +11,7 @@ const notePanel=document.getElementById("notePanel");
 const addNoteBtn=document.getElementById("addNote");
 const saveNoteBtn=document.getElementById("saveNote");
 const notesContainer=document.getElementById("notesContainer");
+const closePanelBtn=document.getElementById("closePanel");
 
 function showNotePanel() {
     notePanel.style.display="block";
@@ -78,6 +79,9 @@ getNotes();
 
 addNoteBtn.addEventListener("click", showNotePanel);
 addNoteBtn.addEventListener("touchstart", showNotePanel);
+
+closePanelBtn.addEventListener("click", hideNotePanel);
+closePanelBtn.addEventListener("touchstart", hideNotePanel);
 
 saveNoteBtn.addEventListener("click", function() {
     const title=document.getElementById("noteTitle").value.trim();
