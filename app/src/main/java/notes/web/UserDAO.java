@@ -27,4 +27,17 @@ public class UserDAO {
             }
         } 
     }
+
+    public boolean loginUser(String username, String password) throws SQLException {
+        try(Connection conn=DBConnection.getConnection()) {
+            String login="SELECT * FROM users WHERE username=? AND password=?";
+            try(PreparedStatement ps=conn.prepareStatement(login)) {
+                ps.setString(1, username);
+                ps.setString(2, password);
+                try(ResultSet rs=ps.executeQuery()) {
+                    return rs.next();
+                }
+            }
+        }
+    }
 }

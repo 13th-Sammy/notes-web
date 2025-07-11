@@ -22,7 +22,11 @@ public class RequestHandler implements HttpHandler {
 
         if (path.equals("/register") && method.equalsIgnoreCase("POST")) {
             handleRegister(exchange);
-        } else {
+        }
+        else if(path.equals("/login") && method.equalsIgnoreCase("POST")) {
+            handleLogin(exchange);
+        } 
+        else {
             serveStaticFile(exchange, path);
         }
     }
@@ -40,6 +44,29 @@ public class RequestHandler implements HttpHandler {
             JSONObject res = new JSONObject();
             res.put("success", success);
             if (!success) res.put("message", "Username already exists");
+
+            sendJsonResponse(exchange, res);
+        } catch (Exception e) {
+            JSONObject res = new JSONObject();
+            res.put("success", false);
+            res.put("message", e.getMessage());
+            sendJsonResponse(exchange, res);
+        }
+    }
+
+    @SuppressWarnings("UseSpecificCatch")
+    private void handleLogin(HttpExchange exchange) throws IOException {
+        try {
+            JSONObject req = readJsonFromRequest(exchange);
+            String username = req.getString("username");
+            String password = req.getString("password");   
+            
+            UserDAO dao=new UserDAO();
+            boolean success=dao.loginUser(username, password);
+
+            JSONObject res=new JSONObject();
+            res.put("success", success);
+            if(!success) res.put("message", "Invalid Credentials");
 
             sendJsonResponse(exchange, res);
         } catch (Exception e) {
