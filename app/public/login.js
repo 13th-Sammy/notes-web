@@ -20,6 +20,7 @@ async function login(event) {
     try {
         const response = await post("/login", {username, password});
         if(response.success) {
+            localStorage.setItem("username", username);
             window.location.href="notes.html";
         }
         else {
