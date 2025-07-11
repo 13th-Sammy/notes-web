@@ -14,6 +14,8 @@ const notesContainer=document.getElementById("notesContainer");
 const closePanelBtn=document.getElementById("closePanel");
 
 function showNotePanel() {
+    document.getElementById("noteTitle").value="";
+    document.getElementById("noteContent").value="";
     notePanel.style.display="block";
     noteOverlay.style.display="block";
 }
