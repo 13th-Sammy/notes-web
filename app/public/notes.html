@@ -5,15 +5,49 @@
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
         <link rel="stylesheet" href="style.css">
         <title>Notes</title>
+        <style>
+            #notePanel {
+                display: none;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 500px;
+                max-width: 90%;
+                background: #222;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                z-index: 1000;
+            }
+            #noteOverlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 100vw;
+                background: rgba(0,0,0,0.6);
+                z-index: 999;
+            }
+            #noteTitle {
+                width: 450px;
+            }
+            #noteContent {
+                width: 450px;
+            }
+        </style>
     </head>
     <body>
         <h1>Notes</h1> <hr> <br>
         <a class="btn" id="addNote">Add Note</a>
         <a class="btn" id="delNote">Delete Note</a>
         <a class="btn" id="logOut">Log Out</a> <br> <br> <hr>
+        <div id="noteOverlay"></div>
         <div id="notePanel">
-            <input type="text" placeholder="Title" id="noteTitle"> <br> <br>
-            <textarea placeholder="Content" id="noteContent"></textarea>
+            <input type="text" placeholder="Title" id="noteTitle"> <br>
+            <textarea placeholder="Content" id="noteContent"></textarea> <br> <br>
+            <a class="btn" id="saveNote">Save Note</a>
         </div>
         <script type="module" src="notes.js"></script>
     </body>
