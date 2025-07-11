@@ -37,6 +37,23 @@ function renderNoteCard(title, content) {
     notesContainer.appendChild(card);
 }
 
+async function getNotes() {
+    try {
+        const response=await post("/getNotes", {username});
+
+        if(response.notes) {
+            response.notes.forEach(note => {
+                renderNoteCard(note.title, note.content)
+            });
+        }
+        else {
+            alert("Failed to load notes");
+        }
+    } catch (e) {
+        alert("Error: "+e?.message||e);
+    }
+}
+
 async function addNote(title, content) {
     try {
         const response=await post("/addNote", {username, title, content});

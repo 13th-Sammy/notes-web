@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.sun.net.httpserver.HttpExchange;
@@ -29,6 +30,9 @@ public class RequestHandler implements HttpHandler {
         else if(path.equals("/addNote") && method.equalsIgnoreCase("POST")) {
             handleAddNote(exchange);
         } 
+        else if(path.equals("/getNotes") && method.equalsIgnoreCase("POST")) {
+            handleGetNotes(exchange);
+        }
         else {
             serveStaticFile(exchange, path);
         }
@@ -96,6 +100,29 @@ public class RequestHandler implements HttpHandler {
             if(!success) res.put("message", "Title already exists");
 
             sendJsonResponse(exchange, res);
+        } catch (Exception e) {
+            JSONObject res = new JSONObject();
+            res.put("success", false);
+            res.put("message", e.getMessage());
+            sendJsonResponse(exchange, res);
+        }
+    }
+
+    @SuppressWarnings("UseSpecificCatch") 
+    private void handleGetNotes(HttpExchange exchange) throws IOException {
+        try {
+            JSONObject req=readJsonFromRequest(exchange);
+            String username=req.getString("username");
+
+            NotesDAO dao=new NotesDAO();
+            JSONArray notesArray=dao.getNotes(username);
+            
+            String responseText=notesArray.toString();
+            exchange.getResponseHeaders().set("Content-Type", "application/json");
+            exchange.sendResponseHeaders(200, responseText.getBytes().length);
+            try(OutputStream os=exchange.getResponseBody()) {
+                os.write(responseText.getBytes());
+            }
         } catch (Exception e) {
             JSONObject res = new JSONObject();
             res.put("success", false);

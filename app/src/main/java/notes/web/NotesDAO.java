@@ -5,6 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class NotesDAO {
     public boolean addNote(String username, String title, String content) throws SQLException {
         try(Connection conn=DBConnection.getConnection()) {
@@ -28,5 +31,24 @@ public class NotesDAO {
                 return true;
             }
         }
+    }
+
+    public JSONArray getNotes(String username) throws SQLException {
+        JSONArray notesArray=new JSONArray();
+        try(Connection conn=DBConnection.getConnection()) {
+            String getNotes="SELECT * FROM notes WHERE username=?";
+            try(PreparedStatement ps=conn.prepareStatement(getNotes)) {
+                ps.setString(1, username);
+                try(ResultSet rs=ps.executeQuery()) {
+                    while(rs.next()) {
+                        JSONObject note=new JSONObject();
+                        note.put("title", rs.getString("title"));
+                        note.put("content", rs.getString("content"));
+                        notesArray.put(note);
+                    }
+                }
+            }
+        }
+        return notesArray;
     }
 }
