@@ -16,8 +16,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 public class RequestHandler implements HttpHandler {
-    @Override
-    public void handle(HttpExchange exchange) throws IOException {
+    @Override public void handle(HttpExchange exchange) throws IOException {
         String method = exchange.getRequestMethod();
         String path = exchange.getRequestURI().getPath();
 
