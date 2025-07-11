@@ -80,4 +80,15 @@ public class NotesDAO {
             }
         }
     }
+
+    public void deleteNote(String username, String title) throws SQLException {
+        try(Connection conn=DBConnection.getConnection()) {
+            String deleteNote="DELETE FROM notes WHERE username=? AND title=?";
+            try(PreparedStatement ps=conn.prepareStatement(deleteNote)) {
+                ps.setString(1, username);
+                ps.setString(2, title);
+                ps.executeUpdate();
+            }
+        }
+    }
 }

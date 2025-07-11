@@ -36,6 +36,9 @@ public class RequestHandler implements HttpHandler {
         else if(path.equals("/updateNote") && method.equalsIgnoreCase("POST")) {
             handleUpdateNote(exchange);
         }
+        else if(path.equals("/deleteNote") && method.equalsIgnoreCase("POST")) {
+            handleDeleteNote(exchange);
+        }
         else {
             serveStaticFile(exchange, path);
         }
@@ -148,6 +151,28 @@ public class RequestHandler implements HttpHandler {
             JSONObject res=new JSONObject();
             res.put("success", success);
             if(!success) res.put("message", "Title already exists");
+
+            sendJsonResponse(exchange, res);
+        } catch (Exception e) {
+            JSONObject res = new JSONObject();
+            res.put("success", false);
+            res.put("message", e.getMessage());
+            sendJsonResponse(exchange, res);
+        }
+    }
+
+    @SuppressWarnings("UseSpecificCatch")
+    private void handleDeleteNote(HttpExchange exchange) throws IOException {
+        try {
+            JSONObject req=readJsonFromRequest(exchange);
+            String username=req.getString("username");
+            String title=req.getString("title");
+
+            NotesDAO dao=new NotesDAO();
+            dao.deleteNote(username, title);
+
+            JSONObject res=new JSONObject();
+            res.put("success", true);
 
             sendJsonResponse(exchange, res);
         } catch (Exception e) {
