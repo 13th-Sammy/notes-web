@@ -53,14 +53,16 @@ public class NotesDAO {
     }
 
     public boolean updateNote(String username, String oldTitle, String newTitle, String newContent) throws SQLException {
-        try(Connection conn=DBConnection.getConnection()) {
-            String checkExists="SELECT * FROM notes WHERE username=? AND title=?";
-            try(PreparedStatement ps=conn.prepareStatement(checkExists)) {
-                ps.setString(1, username);
-                ps.setString(2, newTitle);
-                try(ResultSet rs=ps.executeQuery()) {
-                    if(rs.next()) {
-                        return false;
+        if(!newTitle.equals(oldTitle)) {
+            try(Connection conn=DBConnection.getConnection()) {
+                String checkExists="SELECT * FROM notes WHERE username=? AND title=?";
+                try(PreparedStatement ps=conn.prepareStatement(checkExists)) {
+                    ps.setString(1, username);
+                    ps.setString(2, newTitle);
+                    try(ResultSet rs=ps.executeQuery()) {
+                        if(rs.next()) {
+                            return false;
+                        }
                     }
                 }
             }
