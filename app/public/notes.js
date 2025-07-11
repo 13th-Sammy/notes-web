@@ -13,6 +13,9 @@ const saveNoteBtn=document.getElementById("saveNote");
 const notesContainer=document.getElementById("notesContainer");
 const closePanelBtn=document.getElementById("closePanel");
 
+let isEditing=false;
+let origTitle=null;
+
 function showNotePanel() {
     document.getElementById("noteTitle").value="";
     document.getElementById("noteContent").value="";
@@ -37,6 +40,25 @@ function renderNoteCard(title, content) {
 
     card.appendChild(titleElem);
     card.appendChild(contentElem);
+
+    card.addEventListener("click", function() {
+        isEditing=true;
+        origTitle=title;
+
+        notePanel.style.display="block";
+        document.getElementById("noteTitle").value=title;
+        document.getElementById("noteContent").value=content;
+    });
+
+    card.addEventListener("touchstart", function() {
+        isEditing=true;
+        origTitle=title;
+
+        notePanel.style.display="block";
+        document.getElementById("noteTitle").value=title;
+        document.getElementById("noteContent").value=content;
+    });
+
     notesContainer.appendChild(card);
 }
 
@@ -77,6 +99,10 @@ function logOut() {
     window.location.href="login.html";
 }
 
+function clearNotes() {
+    notesContainer.innerHTML="";
+}
+
 getNotes();
 
 addNoteBtn.addEventListener("click", showNotePanel);
@@ -85,17 +111,67 @@ addNoteBtn.addEventListener("touchstart", showNotePanel);
 closePanelBtn.addEventListener("click", hideNotePanel);
 closePanelBtn.addEventListener("touchstart", hideNotePanel);
 
-saveNoteBtn.addEventListener("click", function() {
+saveNoteBtn.addEventListener("click", async function() {
     const title=document.getElementById("noteTitle").value.trim();
     const content=document.getElementById("noteContent").value.trim();
-    addNote(title, content);
-    hideNotePanel();
+
+    if(!title || !content) {
+        alert("Title and Content cannot be empty");
+        return;
+    }
+
+    if(isEditing) {
+        try {
+            const response=await post("/updateNote", {username, oldTitle: origTitle, newTitle: title, newContent: content});
+            if(response.success) {
+                hideNotePanel();
+                isEditing=false;
+                origTitle=null;
+                clearNotes();
+                getNotes();
+            }
+            else {
+                alert(response.message || "Update Note Failed");
+            }
+        } catch (e) {
+            alert("Error: "+e?.message||e);
+        }
+    } 
+    else {
+        addNote(title, content);
+        hideNotePanel();
+    }
 });
-saveNoteBtn.addEventListener("touchstart", function() {
+saveNoteBtn.addEventListener("touchstart", async function() {
     const title=document.getElementById("noteTitle").value.trim();
     const content=document.getElementById("noteContent").value.trim();
-    addNote(title, content);
-    hideNotePanel();
+
+    if(!title || !content) {
+        alert("Title and Content cannot be empty");
+        return;
+    }
+
+    if(isEditing) {
+        try {
+            const response=await post("/updateNote", {username, oldTitle: origTitle, newTitle: title, newContent: content});
+            if(response.success) {
+                hideNotePanel();
+                isEditing=false;
+                origTitle=null;
+                clearNotes();
+                getNotes();
+            }
+            else {
+                alert(response.message || "Update Note Failed");
+            }
+        } catch (e) {
+            alert("Error: "+e?.message||e);
+        }
+    } 
+    else {
+        addNote(title, content);
+        hideNotePanel();
+    }
 });
 
 logOutBtn.addEventListener("click", logOut);
