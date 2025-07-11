@@ -41,7 +41,7 @@ async function getNotes() {
     try {
         const response=await post("/getNotes", {username});
 
-        if(response.notes) {
+        if(response.success && response.notes) {
             response.notes.forEach(note => {
                 renderNoteCard(note.title, note.content)
             });

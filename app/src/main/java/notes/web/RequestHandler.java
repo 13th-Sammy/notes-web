@@ -119,7 +119,8 @@ public class RequestHandler implements HttpHandler {
             
             JSONObject res=new JSONObject();
             res.put("notes", notesArray);
-            
+            res.put("success", true);
+
             sendJsonResponse(exchange, res);
         } catch (Exception e) {
             JSONObject res = new JSONObject();
