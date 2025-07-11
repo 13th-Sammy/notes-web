@@ -51,4 +51,31 @@ public class NotesDAO {
         }
         return notesArray;
     }
+
+    public boolean updateNote(String username, String oldTitle, String newTitle, String newContent) throws SQLException {
+        try(Connection conn=DBConnection.getConnection()) {
+            String checkExists="SELECT * FROM notes WHERE username=? AND title=?";
+            try(PreparedStatement ps=conn.prepareStatement(checkExists)) {
+                ps.setString(1, username);
+                ps.setString(2, newTitle);
+                try(ResultSet rs=ps.executeQuery()) {
+                    if(rs.next()) {
+                        return false;
+                    }
+                }
+            }
+        }
+        
+        try(Connection conn=DBConnection.getConnection()) {
+            String updateNote="UPDATE notes SET title=?, content=? WHERE username=? AND title=?";
+            try(PreparedStatement ps=conn.prepareStatement(updateNote)) {
+                ps.setString(1, newTitle);
+                ps.setString(2, newContent);
+                ps.setString(3, username);
+                ps.setString(4, oldTitle);
+                ps.executeUpdate();
+                return true;
+            }
+        }
+    }
 }
