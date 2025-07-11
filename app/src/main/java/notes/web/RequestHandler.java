@@ -33,7 +33,7 @@ public class RequestHandler implements HttpHandler {
         else if(path.equals("/getNotes") && method.equalsIgnoreCase("POST")) {
             handleGetNotes(exchange);
         }
-        else if(path.equals("updateNote") && method.equalsIgnoreCase("POST")) {
+        else if(path.equals("/updateNote") && method.equalsIgnoreCase("POST")) {
             handleUpdateNote(exchange);
         }
         else {
