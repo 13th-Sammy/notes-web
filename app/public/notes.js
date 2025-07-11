@@ -74,6 +74,8 @@ function logOut() {
     window.location.href="login.html";
 }
 
+getNotes();
+
 addNoteBtn.addEventListener("click", showNotePanel);
 addNoteBtn.addEventListener("touchstart", showNotePanel);
 
