@@ -25,8 +25,6 @@ public class UserDAO {
                 ps.executeUpdate();
                 return true;
             }
-        } catch(SQLException e) {
-            throw e;
-        }
+        } 
     }
 }
