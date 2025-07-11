@@ -26,6 +26,9 @@ public class RequestHandler implements HttpHandler {
         else if(path.equals("/login") && method.equalsIgnoreCase("POST")) {
             handleLogin(exchange);
         } 
+        else if(path.equals("/addNote") && method.equalsIgnoreCase("POST")) {
+            handleAddNote(exchange);
+        } 
         else {
             serveStaticFile(exchange, path);
         }
@@ -67,6 +70,30 @@ public class RequestHandler implements HttpHandler {
             JSONObject res=new JSONObject();
             res.put("success", success);
             if(!success) res.put("message", "Invalid Credentials");
+
+            sendJsonResponse(exchange, res);
+        } catch (Exception e) {
+            JSONObject res = new JSONObject();
+            res.put("success", false);
+            res.put("message", e.getMessage());
+            sendJsonResponse(exchange, res);
+        }
+    }
+
+    @SuppressWarnings("UseSpecificCatch")
+    private void handleAddNote(HttpExchange exchange) throws IOException {
+        try {
+            JSONObject req=readJsonFromRequest(exchange);
+            String username=req.getString("username");
+            String title=req.getString("title");
+            String content=req.getString("content");
+
+            NotesDAO dao=new NotesDAO();
+            boolean success=dao.addNote(username, title, content);
+
+            JSONObject res=new JSONObject();
+            res.put("success", success);
+            if(!success) res.put("message", "Title already exists");
 
             sendJsonResponse(exchange, res);
         } catch (Exception e) {

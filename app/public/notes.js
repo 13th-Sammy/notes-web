@@ -22,10 +22,6 @@ function hideNotePanel() {
     noteOverlay.style.display="none";
 }
 
-function addNote(title, content) {
-
-}
-
 function renderNoteCard(title, content) {
     const card=document.createElement("div");
     card.className="note-card";
@@ -39,6 +35,21 @@ function renderNoteCard(title, content) {
     card.appendChild(titleElem);
     card.appendChild(contentElem);
     notesContainer.appendChild(card);
+}
+
+async function addNote(title, content) {
+    try {
+        const response=await post("/addNote", {username, title, content});
+
+        if(response.success) {
+            renderNoteCard(title, content);
+        }
+        else {
+            alert(response.message || "Failed to add note");
+        }
+    } catch (e) {
+        alert("Error: "+e?.message||e);
+    }
 }
 
 function logOut() {
