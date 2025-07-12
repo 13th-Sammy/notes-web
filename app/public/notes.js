@@ -2,7 +2,7 @@ import {post} from './api.js'
 
 const username=localStorage.getItem("username");
 if(!username) {
-    window.location.href="index.html"
+    location.replace('/index.html');
 }
 
 const logOutBtn=document.getElementById("logOut");
@@ -93,17 +93,9 @@ function clearNotes() {
     notesContainer.innerHTML="";
 }
 
-function preventBackAfterLogout() {
-    history.pushState(null, "", location.href);
-    window.onpopstate=function () {
-        history.go(1);
-    };
-}
-
 function logOut() {
     localStorage.clear();
-    preventBackAfterLogout();
-    window.location.href="index.html";
+    location.replace('/index.html');
 }
 
 getNotes();
