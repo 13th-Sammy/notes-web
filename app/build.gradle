@@ -45,3 +45,17 @@ tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }
+
+jar {
+    manifest {
+        attributes (
+            'Main-Class':'notes.web.Main'
+        )
+    }
+    duplicatesStrategy=DuplicatesStrategy.EXCLUDE
+    from {
+        configurations.runtimeClasspath.collect{
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
