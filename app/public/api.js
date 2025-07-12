@@ -1,4 +1,4 @@
-const API_BASE="https://1e2b08e8a537.ngrok-free.app";
+const API_BASE=window.location.origin;
 
 export async function post(path, data) {
     const response=await fetch(`${API_BASE}${path}`, {
