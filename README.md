@@ -1,6 +1,7 @@
 # Notes Web
 
-A full-stack web application for managing personal notes with user authentication, built with Java backend and vanilla JavaScript frontend.
+A full-stack web application for managing personal notes with user authentication, built with Java backend and vanilla JavaScript frontend. <br>
+Visit https://notes-web-0dof.onrender.com to use Notes Web !
 
 ## Features
 
