@@ -54,15 +54,6 @@ function renderNoteCard(title, content) {
         document.getElementById("noteContent").value=content;
     });
 
-    card.addEventListener("touchstart", function() {
-        isEditing=true;
-        origTitle=title;
-
-        notePanel.style.display="block";
-        document.getElementById("noteTitle").value=title;
-        document.getElementById("noteContent").value=content;
-    });
-
     notesContainer.appendChild(card);
 }
 
@@ -110,43 +101,10 @@ function logOut() {
 getNotes();
 
 addNoteBtn.addEventListener("click", showNotePanel);
-addNoteBtn.addEventListener("touchstart", showNotePanel);
 
 closePanelBtn.addEventListener("click", hideNotePanel);
-closePanelBtn.addEventListener("touchstart", hideNotePanel);
 
 saveNoteBtn.addEventListener("click", async function() {
-    const title=document.getElementById("noteTitle").value.trim();
-    const content=document.getElementById("noteContent").value.trim();
-
-    if(!title || !content) {
-        alert("Title and Content cannot be empty");
-        return;
-    }
-
-    if(isEditing) {
-        try {
-            const response=await post("/updateNote", {username, oldTitle: origTitle, newTitle: title, newContent: content});
-            if(response.success) {
-                hideNotePanel();
-                isEditing=false;
-                origTitle=null;
-                clearNotes();
-                getNotes();
-            }
-            else {
-                alert(response.message || "Update Note Failed");
-            }
-        } catch (e) {
-            alert("Error: "+e?.message||e);
-        }
-    } 
-    else {
-        addNote(title, content);
-        hideNotePanel();
-    }
-});
-saveNoteBtn.addEventListener("touchstart", async function() {
     const title=document.getElementById("noteTitle").value.trim();
     const content=document.getElementById("noteContent").value.trim();
 
@@ -209,76 +167,6 @@ delNoteBtn.addEventListener("click", function() {
                     alert("Error: "+e?.message||e);   
                 }
             });
-            cross.addEventListener("touchstart", async (e) => {
-                e.stopPropagation();
-
-                const title=card.dataset.title;
-                try{
-                    const response=await post("/deleteNote", {username, title});
-                    if(response.success) {
-                        card.remove();
-                    }
-                    else {
-                        alert(response.message || "Delete Note Failed");
-                    }
-                } catch (e) {
-                    alert("Error: "+e?.message||e);   
-                }
-            });
-            card.appendChild(cross);
-        }
-        else {
-            if (!deleteMode && del) del.remove();
-        }
-    });
-});
-delNoteBtn.addEventListener("touchstart", function() {
-    deleteMode=!deleteMode;
-
-    const cards=document.querySelectorAll(".note-card");
-    cards.forEach(card => {
-        let del=card.querySelector(".delete-cross");
-        if(deleteMode && !del) {
-            const cross=document.createElement("span");
-            cross.className="delete-cross";
-            cross.textContent="❌";
-            cross.style.position="absolute";
-            cross.style.top="5px";
-            cross.style.right="10px";
-            cross.style.cursor="pointer";
-
-            cross.addEventListener("click", async (e) => {
-                e.stopPropagation();
-
-                const title=card.dataset.title;
-                try{
-                    const response=await post("/deleteNote", {username, title});
-                    if(response.success) {
-                        card.remove();
-                    }
-                    else {
-                        alert(response.message || "Delete Note Failed");
-                    }
-                } catch (e) {
-                    alert("Error: "+e?.message||e);   
-                }
-            });
-            cross.addEventListener("touchstart", async (e) => {
-                e.stopPropagation();
-
-                const title=card.dataset.title;
-                try{
-                    const response=await post("/deleteNote", {username, title});
-                    if(response.success) {
-                        card.remove();
-                    }
-                    else {
-                        alert(response.message || "Delete Note Failed");
-                    }
-                } catch (e) {
-                    alert("Error: "+e?.message||e);   
-                }
-            });
             card.appendChild(cross);
         }
         else {
@@ -288,4 +176,3 @@ delNoteBtn.addEventListener("touchstart", function() {
 });
 
 logOutBtn.addEventListener("click", logOut);
-logOutBtn.addEventListener("touchstart", logOut);
